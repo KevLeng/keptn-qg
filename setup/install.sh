@@ -29,6 +29,10 @@ fi
 if [[ "$DT_API_TOKEN" == "none" ]]; then
     if [[ "$APITOKEN" != "none" ]]; then
       DT_API_TOKEN=${APITOKEN}
+    else
+      echo "You have to set DT_API_TOKEN to a Token that has read/write configuration, access metrics, log content and capture request data priviliges"
+      echo "If you want to learn more please visit https://keptn.sh/docs/0.7.x/monitoring/dynatrace/install"
+      exit 1
     fi
 fi
 
