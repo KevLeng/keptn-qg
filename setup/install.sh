@@ -9,6 +9,37 @@ HELM_VERSION="3.3.0"
 ISTIO_VERSION="1.7.3"
 KEPTN_VERSION="0.7.3"
 
+DT_TENANT=${DT_TENANT:-none}
+DT_API_TOKEN=${DT_API_TOKEN:-none}
+DT_PAAS_TOKEN=${DT_PAAS_TOKEN:-none}
+
+TENANT=${TENANT:-none}
+PAASTOKEN=${PAASTOKEN:-none}
+APITOKEN=${APITOKEN:-none}
+
+if [[ "$DT_TENANT" == "none" ]]; then
+    echo "You have to set DT_TENANT to your Tenant URL, e.g: abc12345.dynatrace.live.com or yourdynatracemanaged.com/e/abcde-123123-asdfa-1231231"
+    echo "To learn more about the required settings please visit https://keptn.sh/docs/0.7.x/monitoring/dynatrace/install"
+    exit 1
+fi
+if [[ "$DT_API_TOKEN" == "none" ]]; then
+    if [[ "$APITOKEN" != "none" ]]; then
+      DT_API_TOKEN=${APITOKEN}
+    fi
+fi
+if [[ "$DT_PAAS_TOKEN" == "none" ]]; then
+    if [[ "$PAASTOKEN" != "none" ]]; then
+      DT_PAAS_TOKEN=${PAASTOKEN}
+fi
+
+echo "DT_TENANT=${DT_TENANT}"
+echo "DT_PAAS_TOKEN=${DT_PAAS_TOKEN}"
+echo "DT_API_TOKEN=${DT_API_TOKEN}"
+
+echo "TENANT=${TENANT}"
+echo "PAASTOKEN=${PAASTOKEN}"
+echo "APITOKEN=${APITOKEN}"
+
 
 KEPTN_DYNATRACE_SERVICE_VERSION="0.10.2"
 KEPTN_DYNATRACE_SLI_SERVICE_VERSION="release-0.7.3"
