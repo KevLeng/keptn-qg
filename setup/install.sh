@@ -10,6 +10,11 @@ HELM_VERSION="3.3.0"
 ISTIO_VERSION="1.7.3"
 KEPTN_VERSION="0.7.3"
 
+
+KEPTN_DYNATRACE_SERVICE_VERSION="0.10.2"
+KEPTN_DYNATRACE_SLI_SERVICE_VERSION="release-0.7.3"
+KEPTN_DYNATRACE_MONACO_SERVICE_VERSION="release-0.2.1"
+
 echo "-----------------------------------------------------------------------"
 echo "Version Details"
 echo "K3S_VERSION=${K3S_VERSION}"
