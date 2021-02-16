@@ -101,8 +101,11 @@ K8S_DOMAIN =
 PUBLIC_IP=$(curl -s ifconfig.me)
 PUBLIC_IP_AS_DOM=$(echo $PUBLIC_IP | sed 's~\.~-~g')
 export DOMAIN="${PUBLIC_IP_AS_DOM}.nip.io"
-export K8S_DOMAIN=$DOMAIN
+export K8S_DOMAIN="${DOMAIN}"
 
+echo "PUBLIC_IP=${PUBLIC_IP}"
+echo "PUBLIC_IP_AS_DOM=${PUBLIC_IP_AS_DOM}"
+echo "DOMAIN=${DOMAIN}"
 echo "K8S_DOMAIN={$K8S_DOMAIN}"
 
 
