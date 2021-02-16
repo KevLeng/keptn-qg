@@ -17,9 +17,14 @@ TENANT=${TENANT:-none}
 APITOKEN=${APITOKEN:-none}
 
 if [[ "$DT_TENANT" == "none" ]]; then
+  if [[ "$TENANT" != "none" ]]; then
+    DT_API_TOKEN=${TENANT}
+  else
     echo "You have to set DT_TENANT to your Tenant URL, e.g: abc12345.dynatrace.live.com or yourdynatracemanaged.com/e/abcde-123123-asdfa-1231231"
     echo "To learn more about the required settings please visit https://keptn.sh/docs/0.7.x/monitoring/dynatrace/install"
     exit 1
+  fi
+
 fi
 if [[ "$DT_API_TOKEN" == "none" ]]; then
     if [[ "$APITOKEN" != "none" ]]; then
