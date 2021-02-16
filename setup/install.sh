@@ -8,6 +8,9 @@ K3S_VERSION="v1.19.5+k3s1"
 HELM_VERSION="3.3.0"
 ISTIO_VERSION="1.7.3"
 KEPTN_VERSION="0.7.3"
+REPO="https://github.com/KevLeng/keptn-qg.git"
+REPO_RELEASE="master"
+REPO_DIR="~/keptn-qg"
 
 DT_TENANT=${DT_TENANT:-none}
 DT_API_TOKEN=${DT_API_TOKEN:-none}
@@ -267,6 +270,15 @@ keptn auth  --api-token "${KEPTN_API_TOKEN}" --endpoint "${KEPTN_ENDPOINT}/api"
 
 echo "Create Default Dynatrace project"
 keptn create project dynatrace --shipyard=./shipyard.yaml
+
+
+echo "-----------------------------------------------------------------------"
+echo "Clone GitHub Repo
+echo "-----------------------------------------------------------------------"
+git clone --branch $REPO_RELEASE $REPO $REPO_DIR --single-branch"
+echo "Create Default Dynatrace project"
+keptn create project dynatrace --shipyard=$REPO_DIR/shipyard.yaml
+
 
 
 echo "-----------------------------------------------------------------------"
