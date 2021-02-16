@@ -101,7 +101,7 @@ K8S_DOMAIN =
 PUBLIC_IP=$(curl -s ifconfig.me)
 PUBLIC_IP_AS_DOM=$(echo $PUBLIC_IP | sed 's~\.~-~g')
 export DOMAIN="${PUBLIC_IP_AS_DOM}.nip.io"
-export K8S_DOMAIN = $DOMAIN
+export K8S_DOMAIN=$DOMAIN
 
 echo "K8S_DOMAIN={$K8S_DOMAIN}"
 
@@ -143,7 +143,7 @@ echo "-----------------------------------------------------------------------"
 echo "Exposes the Keptn Bridge via Istio Ingress: $KEPTN_INGRESS_HOSTNAME"
 echo "-----------------------------------------------------------------------"
 
-cat > ./gen/keptn-ingress.yaml <<- EOM
+cat > ./keptn-ingress.yaml <<- EOM
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
@@ -160,9 +160,9 @@ spec:
           serviceName: api-gateway-nginx
           servicePort: 80
 EOM
-kubectl apply -f ./gen/keptn-ingress.yaml
+kubectl apply -f ./keptn-ingress.yaml
 
-cat > ./gen/gateway.yaml <<- EOM
+cat > ./gateway.yaml <<- EOM
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
@@ -180,7 +180,7 @@ spec:
     hosts:
     - '*'
 EOM
-kubectl apply -f ./gen/gateway.yaml
+kubectl apply -f ./gateway.yaml
 
 echo "-----------------------------------------------------------------------"
 echo "Ensure Keptns Helm Service has the correct Istio ingress information: $KEPTN_INGRESS_HOSTNAME"
