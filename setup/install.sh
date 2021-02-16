@@ -24,8 +24,17 @@ if [[ "$DT_TENANT" == "none" ]]; then
     echo "To learn more about the required settings please visit https://keptn.sh/docs/0.7.x/monitoring/dynatrace/install"
     exit 1
   fi
-
 fi
+
+if [[ "$DT_TENANT" == "http://"* ]]; then
+        DT_TENANT=${DT_TENANT:7}
+        echo "DT_TENANT was set starting with http://, removing. DT_TENANT is now ${DT_TENANT}"
+elif [[ "$DT_TENANT" == "https://"* ]]; then
+        DT_TENANT=${DT_TENANT:8}
+        echo "DT_TENANT was set starting with http:s//, removing. DT_TENANT is now ${DT_TENANT}"
+fi
+
+if 
 if [[ "$DT_API_TOKEN" == "none" ]]; then
     if [[ "$APITOKEN" != "none" ]]; then
       DT_API_TOKEN=${APITOKEN}
@@ -135,7 +144,7 @@ echo "Waiting for Keptn pods to be ready (max 5 minutes)"
 echo "-----------------------------------------------------------------------"
 kubectl wait --namespace=keptn --for=condition=Ready pods --timeout=300s --all
 
-K8S_DOMAIN = 
+
 PUBLIC_IP=$(curl -s ifconfig.me)
 PUBLIC_IP_AS_DOM=$(echo $PUBLIC_IP | sed 's~\.~-~g')
 export DOMAIN="${PUBLIC_IP_AS_DOM}.nip.io"
@@ -144,7 +153,7 @@ export K8S_DOMAIN="${DOMAIN}"
 echo "PUBLIC_IP=${PUBLIC_IP}"
 echo "PUBLIC_IP_AS_DOM=${PUBLIC_IP_AS_DOM}"
 echo "DOMAIN=${DOMAIN}"
-echo "K8S_DOMAIN={$K8S_DOMAIN}"
+echo "K8S_DOMAIN=${K8S_DOMAIN}"
 
 
 INGRESS_PORT=${INGRESS_PORT:-80}
