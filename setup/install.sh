@@ -8,6 +8,15 @@
 K3S_VERSION="v1.19.5+k3s1"
 HELM_VERSION="3.3.0"
 ISTIO_VERSION="1.7.3"
+KEPTN_VERSION="0.7.3"
+
+echo "-----------------------------------------------------------------------"
+echo "Version Details"
+echo "K3S_VERSION=${K3S_VERSION}"
+echo "HELM_VERSION=${HELM_VERSION}"
+echo "ISTIO_VERSION=${ISTIO_VERSION}"
+echo "KEPTN_VERSION=${KEPTN_VERSION}"
+echo "-----------------------------------------------------------------------"
 
 echo "-----------------------------------------------------------------------"
 echo "Download and install K3S"
@@ -76,3 +85,30 @@ else
 fi
 
 INGRESS_HOST=$(kubectl get svc istio-ingressgateway -n istio-system -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+
+echo "-----------------------------------------------------------------------"
+echo "Install Keptn"
+echo "-----------------------------------------------------------------------"
+wget https://storage.googleapis.com/keptn-installer/keptn-${KEPTN_VERSION}.tgz
+helm upgrade keptn keptn-${KEPTN_VERSION}.tgz --install -n keptn --create-namespace --wait --set=continuous-delivery.enabled=true
+rm keptn-${KEPTN_VERSION}.tgz
+echo "-----------------------------------------------------------------------"
+echo "Waiting for Keptn pods to be ready (max 5 minutes)"
+echo "-----------------------------------------------------------------------"
+kubectl wait --namespace=keptn --for=condition=Ready pods --timeout=300s --all
+
+
+INGRESS_PORT=${INGRESS_PORT:-80}
+INGRESS_PROTOCOL=${INGRESS_PROTOCOL:-http}
+ISTIO_GATEWAY=${ISTIO_GATEWAY:-public-gateway.istio-system}
+
+KEPTN_INGRESS_HOSTNAME="keptn.$K8S_DOMAIN"
+KEPTN_ENDPOINT="http://$KEPTN_INGRESS_HOSTNAME"
+
+KEPTN_API_TOKEN=$(kubectl get secret keptn-api-token -n keptn -ojsonpath={.data.keptn-api-token} | base64 --decode)
+BRIDGE_USERNAME=$(kubectl get secret bridge-credentials -n keptn -o jsonpath={.data.BASIC_AUTH_USERNAME} | base64 -d)
+BRIDGE_PASSWORD=$(kubectl get secret bridge-credentials -n keptn -o jsonpath={.data.BASIC_AUTH_PASSWORD} | base64 -d)
+
+GIT_USER=$(kubectl get secret bridge-credentials -n keptn -o jsonpath={.data.BASIC_AUTH_USERNAME} | base64 -d)
+GIT_PASSWORD=$(kubectl get secret bridge-credentials -n keptn -o jsonpath={.data.BASIC_AUTH_PASSWORD} | base64 -d)
+GIT_SERVER="http://git.$K8S_DOMAIN"
