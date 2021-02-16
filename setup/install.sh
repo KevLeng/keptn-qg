@@ -260,7 +260,7 @@ kubectl apply -n keptn -f https://raw.githubusercontent.com/keptn-sandbox/monaco
 echo "Authenticate Keptn CLI"
 keptn auth  --api-token "${KEPTN_API_TOKEN}" --endpoint "${KEPTN_ENDPOINT}/api"
 
-echo "8. Create Default Dynatrace project"
+echo "Create Default Dynatrace project"
 keptn create project dynatrace --shipyard=./shipyard.yaml
 
 
