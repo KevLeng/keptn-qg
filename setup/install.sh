@@ -36,13 +36,13 @@ if [[ "$DT_API_TOKEN" == "none" ]]; then
     fi
 fi
 
-
+echo "-----------------------------------------------------------------------"
 echo "DT_TENANT=${DT_TENANT}"
 echo "DT_API_TOKEN=${DT_API_TOKEN}"
-
+echo "-----------------------------------------------------------------------"
 echo "TENANT=${TENANT}"
 echo "APITOKEN=${APITOKEN}"
-
+echo "-----------------------------------------------------------------------"
 
 KEPTN_DYNATRACE_SERVICE_VERSION="0.10.2"
 KEPTN_DYNATRACE_SLI_SERVICE_VERSION="release-0.7.3"
