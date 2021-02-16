@@ -34,7 +34,6 @@ elif [[ "$DT_TENANT" == "https://"* ]]; then
         echo "DT_TENANT was set starting with http:s//, removing. DT_TENANT is now ${DT_TENANT}"
 fi
 
-if 
 if [[ "$DT_API_TOKEN" == "none" ]]; then
     if [[ "$APITOKEN" != "none" ]]; then
       DT_API_TOKEN=${APITOKEN}
