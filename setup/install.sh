@@ -1,7 +1,6 @@
 #!/bin/bash
 # This script will 
 # * Install all necessary tools such as Helm, Istio and Keptn CLI
-
 #
 # It requires the following ENV-Variables to be set!
 
