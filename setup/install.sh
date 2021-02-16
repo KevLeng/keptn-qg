@@ -97,6 +97,14 @@ echo "Waiting for Keptn pods to be ready (max 5 minutes)"
 echo "-----------------------------------------------------------------------"
 kubectl wait --namespace=keptn --for=condition=Ready pods --timeout=300s --all
 
+K8S_DOMAIN = 
+PUBLIC_IP=$(curl -s ifconfig.me)
+PUBLIC_IP_AS_DOM=$(echo $PUBLIC_IP | sed 's~\.~-~g')
+export DOMAIN="${PUBLIC_IP_AS_DOM}.nip.io"
+export K8S_DOMAIN = $DOMAIN
+
+echo "K8S_DOMAIN={$K8S_DOMAIN}"
+
 
 INGRESS_PORT=${INGRESS_PORT:-80}
 INGRESS_PROTOCOL=${INGRESS_PROTOCOL:-http}
@@ -112,3 +120,73 @@ BRIDGE_PASSWORD=$(kubectl get secret bridge-credentials -n keptn -o jsonpath={.d
 GIT_USER=$(kubectl get secret bridge-credentials -n keptn -o jsonpath={.data.BASIC_AUTH_USERNAME} | base64 -d)
 GIT_PASSWORD=$(kubectl get secret bridge-credentials -n keptn -o jsonpath={.data.BASIC_AUTH_PASSWORD} | base64 -d)
 GIT_SERVER="http://git.$K8S_DOMAIN"
+
+
+echo "INGRESS_PORT=${INGRESS_PORT}"
+echo "INGRESS_PROTOCOL=${INGRESS_PROTOCOL}"
+echo "ISTIO_GATEWAY=${ISTIO_GATEWAY}"
+
+echo "KEPTN_INGRESS_HOSTNAME=${KEPTN_INGRESS_HOSTNAME}"
+echo "KEPTN_ENDPOINT=${KEPTN_ENDPOINT}"
+
+echo "KEPTN_API_TOKEN=${KEPTN_API_TOKEN}"
+echo "BRIDGE_USERNAME=${BRIDGE_USERNAME}"
+echo "BRIDGE_PASSWORD=${BRIDGE_PASSWORD}"
+echo "GIT_USER=${GIT_USER}"
+echo "GIT_PASSWORD=${GIT_PASSWORD}"
+echo "GIT_SERVER=${GIT_SERVER}"
+
+
+echo "-----------------------------------------------------------------------"
+
+echo "-----------------------------------------------------------------------"
+echo "Exposes the Keptn Bridge via Istio Ingress: $KEPTN_INGRESS_HOSTNAME"
+echo "-----------------------------------------------------------------------"
+
+cat > ./gen/keptn-ingress.yaml <<- EOM
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: istio
+  name: api-keptn-ingress
+  namespace: keptn
+spec:
+  rules:
+  - host: keptn.$K8S_DOMAIN
+    http:
+      paths:
+      - backend:
+          serviceName: api-gateway-nginx
+          servicePort: 80
+EOM
+kubectl apply -f ./gen/keptn-ingress.yaml
+
+cat > ./gen/gateway.yaml <<- EOM
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: public-gateway
+  namespace: istio-system
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      name: http
+      number: 80
+      protocol: HTTP
+    hosts:
+    - '*'
+EOM
+kubectl apply -f ./gen/gateway.yaml
+
+echo "-----------------------------------------------------------------------"
+echo "Ensure Keptns Helm Service has the correct Istio ingress information: $KEPTN_INGRESS_HOSTNAME"
+echo "-----------------------------------------------------------------------"
+echo "1. Create ConfigMap"
+kubectl create configmap -n keptn ingress-config --from-literal=ingress_hostname_suffix=${KEPTN_INGRESS_HOSTNAME} --from-literal=ingress_port=${INGRESS_PORT} --from-literal=ingress_protocol=${INGRESS_PROTOCOL} --from-literal=istio_gateway=${ISTIO_GATEWAY} -oyaml --dry-run | kubectl replace -f -
+
+echo "2. Restart Helm Service"
+kubectl delete pod -n keptn --selector=app.kubernetes.io/name=helm-service
