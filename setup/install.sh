@@ -193,8 +193,55 @@ kubectl apply -f ./gateway.yaml
 echo "-----------------------------------------------------------------------"
 echo "Ensure Keptns Helm Service has the correct Istio ingress information: $KEPTN_INGRESS_HOSTNAME"
 echo "-----------------------------------------------------------------------"
-echo "1. Create ConfigMap"
+echo "Create ConfigMap"
 kubectl create configmap -n keptn ingress-config --from-literal=ingress_hostname_suffix=${KEPTN_INGRESS_HOSTNAME} --from-literal=ingress_port=${INGRESS_PORT} --from-literal=ingress_protocol=${INGRESS_PROTOCOL} --from-literal=istio_gateway=${ISTIO_GATEWAY} -oyaml --dry-run | kubectl replace -f -
-
-echo "2. Restart Helm Service"
+echo "-----------------------------------------------------------------------"
+echo "Restart Helm Service"
+echo "-----------------------------------------------------------------------"
 kubectl delete pod -n keptn --selector=app.kubernetes.io/name=helm-service
+
+
+echo "-----------------------------------------------------------------------"
+echo "Install & Configure Keptn Dynatrace integration"
+echo "-----------------------------------------------------------------------"
+echo "Create the Dynatrace Secret in the keptn namespace"
+kubectl create secret generic -n keptn dynatrace \
+    --from-literal="DT_TENANT=$DT_TENANT" \
+    --from-literal="DT_API_TOKEN=$DT_API_TOKEN" \
+    --from-literal="KEPTN_API_URL=${KEPTN_ENDPOINT}/api" \
+    --from-literal="KEPTN_API_TOKEN=${KEPTN_API_TOKEN}" \
+    --from-literal="KEPTN_BRIDGE_URL=${KEPTN_ENDPOINT}/bridge" || true
+
+echo "Make Dynatrace the default SLI provider for keptn"
+kubectl create configmap lighthouse-config -n keptn --from-literal=sli-provider=dynatrace || true
+
+echo "Install the dynatrace service for keptn"
+kubectl apply -n keptn -f https://raw.githubusercontent.com/keptn-contrib/dynatrace-service/${KEPTN_DYNATRACE_SERVICE_VERSION}/deploy/service.yaml
+
+echo "Install the Dynatrace SLI Service for keptn"
+kubectl apply -n keptn -f https://raw.githubusercontent.com/keptn-contrib/dynatrace-sli-service/${KEPTN_DYNATRACE_SLI_SERVICE_VERSION}/deploy/service.yaml
+
+echo "Install Dynatrace Monaco Keptn Service"
+kubectl apply -n keptn -f https://raw.githubusercontent.com/keptn-sandbox/monaco-service/${KEPTN_DYNATRACE_MONACO_SERVICE_VERSION}/deploy/service.yaml
+
+echo "Authenticate Keptn CLI"
+keptn auth  --api-token "${KEPTN_API_TOKEN}" --endpoint "${KEPTN_ENDPOINT}/api"
+
+echo "8. Create Default Dynatrace project"
+keptn create project dynatrace --shipyard=./shipyard.yaml
+
+
+echo "-----------------------------------------------------------------------"
+echo "FINISHED SETUP!!"
+echo "-----------------------------------------------------------------------"
+echo "Keptn "
+
+echo "API URL   :      ${KEPTN_ENDPOINT}/api"
+echo "Bridge URL:      ${KEPTN_ENDPOINT}/bridge"
+echo "Bridge Username: $BRIDGE_USERNAME"
+echo "Bridge Password: $BRIDGE_PASSWORD"
+echo "API Token :      $KEPTN_API_TOKEN"
+
+echo "Git Server:      $GIT_SERVER"
+echo "Git User:        $GIT_USER"
+echo "Git Password:    $GIT_PASSWORD"
