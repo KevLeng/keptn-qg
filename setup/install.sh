@@ -9,7 +9,7 @@ HELM_VERSION="3.3.0"
 ISTIO_VERSION="1.7.3"
 KEPTN_VERSION="0.7.3"
 REPO="https://github.com/KevLeng/keptn-qg.git"
-REPO_RELEASE="master"
+REPO_RELEASE="main"
 REPO_DIR="~/keptn-qg"
 
 DT_TENANT=${DT_TENANT:-none}
