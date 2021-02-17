@@ -59,9 +59,9 @@ keptn add-resource --project="${PROJECTNAME}" --service="${SERVICENAME}" --stage
 
 
 echo "Creating a Git Repository for this project"
-#cd setup/gitea
-#./create-upstream-git.sh ${PROJECTNAME}
-#cd ../..
+cd ~/keptn-qg/setup/gitea
+./create-upstream-git.sh ${PROJECTNAME}
+cd ../..
 
 echo "==============================================================================="
 echo "Just created your Keptn Project '$PROJECTNAME'"
