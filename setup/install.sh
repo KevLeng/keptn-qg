@@ -275,7 +275,7 @@ keptn auth  --api-token "${KEPTN_API_TOKEN}" --endpoint "${KEPTN_ENDPOINT}/api"
 
 
 echo "-----------------------------------------------------------------------"
-echo "Clone GitHub Repo
+echo "Clone GitHub Repo"
 echo "-----------------------------------------------------------------------"
 git clone --branch ${REPO_RELEASE} ${REPO} ${REPO_DIR} --single-branch
 
@@ -320,6 +320,7 @@ kubectl apply -f $GITEA_DIR/gen/gitea-ingress.yaml
 echo "-----------------------------------------------------------------------"
 echo "Waiting for Gitea pods to be ready (max 5 minutes)"
 echo "-----------------------------------------------------------------------"
+
 kubectl wait --namespace=git --for=condition=Ready pods --timeout=300s --all
 
 customerProject(){
