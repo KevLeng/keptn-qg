@@ -297,7 +297,7 @@ echo "-----------------------------------------------------------------------"
 echo "Add gitea-charts to helm"
 helm repo add gitea-charts https://dl.gitea.io/charts/
 
-GITEA_DIR = $REPO_DIR/setup/gitea
+GITEA_DIR = "${REPO_DIR}/setup/gitea"
 source $GITEA_DIR/gitea-vars.sh
 
 echo "Create namespace for git"
