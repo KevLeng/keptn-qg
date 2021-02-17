@@ -70,6 +70,12 @@ echo "KEPTN_VERSION=${KEPTN_VERSION}"
 echo "-----------------------------------------------------------------------"
 
 echo "-----------------------------------------------------------------------"
+echo "apt get - jq"
+echo "-----------------------------------------------------------------------"
+sudo apt-get update -y
+sudo apt-get install -y jq
+
+echo "-----------------------------------------------------------------------"
 echo "Download and install K3S"
 echo "-----------------------------------------------------------------------"
 curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=${K3S_VERSION} K3S_KUBECONFIG_MODE="644" sh -s - --no-deploy=traefik
@@ -337,7 +343,7 @@ echo "-----------------------------------------------------------------------"
 echo "FINISHED SETUP!!"
 echo "-----------------------------------------------------------------------"
 echo "Keptn "
-
+echo "K8S_DOMAIN=${K8S_DOMAIN}"
 echo "API URL   :      ${KEPTN_ENDPOINT}/api"
 echo "Bridge URL:      ${KEPTN_ENDPOINT}/bridge"
 echo "Bridge Username: $BRIDGE_USERNAME"
@@ -347,3 +353,6 @@ echo "API Token :      $KEPTN_API_TOKEN"
 echo "Git Server:      $GIT_SERVER"
 echo "Git User:        $GIT_USER"
 echo "Git Password:    $GIT_PASSWORD"
+
+echo "K8S_DOMAIN=${K8S_DOMAIN}"
+echo "keptn auth  --api-token "${KEPTN_API_TOKEN}" --endpoint "${KEPTN_ENDPOINT}/api"

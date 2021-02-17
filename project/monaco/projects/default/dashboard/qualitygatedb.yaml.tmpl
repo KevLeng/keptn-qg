@@ -3,7 +3,7 @@ config:
 
 staging_qualitygate_db:
   - owner: "REPLACE_DASHBOARD_OWNER"
-  - keptnbridge: "REPLACE_KEPTN_BRIDGE"
+  - keptnbridge: "http://REPLACE_KEPTN_INGRESS/bridge"
   - name: "KQG;project={{ .Env.KEPTN_PROJECT }};service={{ .Env.KEPTN_SERVICE }};stage={{ .Env.KEPTN_STAGE }}"
   - project: "{{ .Env.KEPTN_PROJECT }}"
   - stage: "{{ .Env.KEPTN_STAGE }}"
