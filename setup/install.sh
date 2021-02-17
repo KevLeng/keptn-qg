@@ -21,8 +21,8 @@ APITOKEN=${APITOKEN:-none}
 
 
 
-create_default_project = true
-create_customer_project = true
+create_default_project=true
+create_customer_project=true
 
 if [[ "$DT_TENANT" == "none" ]]; then
   if [[ "$TENANT" != "none" ]]; then
