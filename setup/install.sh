@@ -236,6 +236,11 @@ spec:
 EOM
 kubectl apply -f ./gateway.yaml
 
+
+rm ./gateway.yaml
+rm ./keptn-ingress.yaml
+
+
 echo "-----------------------------------------------------------------------"
 echo "Ensure Keptns Helm Service has the correct Istio ingress information: $KEPTN_INGRESS_HOSTNAME"
 echo "-----------------------------------------------------------------------"
