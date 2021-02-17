@@ -277,7 +277,7 @@ keptn auth  --api-token "${KEPTN_API_TOKEN}" --endpoint "${KEPTN_ENDPOINT}/api"
 echo "-----------------------------------------------------------------------"
 echo "Clone GitHub Repo
 echo "-----------------------------------------------------------------------"
-git clone --branch ${REPO_RELEASE} ${REPO} ${REPO_DIR} --single-branch"
+git clone --branch ${REPO_RELEASE} ${REPO} ${REPO_DIR} --single-branch
 
 
 
