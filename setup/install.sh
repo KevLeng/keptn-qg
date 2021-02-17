@@ -297,7 +297,8 @@ echo "-----------------------------------------------------------------------"
 echo "Add gitea-charts to helm"
 helm repo add gitea-charts https://dl.gitea.io/charts/
 
-source ./gitea-vars.sh
+GITEA_DIR = $REPO_DIR/setup/gitea
+source $GITEA_DIR/gitea-vars.sh
 
 echo "Create namespace for git"
 kubectl create ns git
@@ -305,14 +306,14 @@ kubectl create ns git
 sed -e 's~domain.placeholder~'"$K8S_DOMAIN"'~' \
     -e 's~GIT_USER.placeholder~'"$GIT_USER"'~' \
     -e 's~GIT_PASSWORD.placeholder~'"$GIT_PASSWORD"'~' \
-    helm-gitea.yaml > gen/helm-gitea.yaml
+    $GITEA_DIR/helm-gitea.yaml > $GITEA_DIR/gen/helm-gitea.yaml
 
 echo "Install gitea via Helmchart"
-helm install gitea gitea-charts/gitea -f gen/helm-gitea.yaml --namespace git
+helm install gitea gitea-charts/gitea -f $GITEA_DIR/gen/helm-gitea.yaml --namespace git
 
 echo "Setup Gitea ingress"
-cat gitea-ingress.yaml | sed 's~domain.placeholder~'"$K8S_DOMAIN"'~' > ./gen/gitea-ingress.yaml
-kubectl apply -f gen/gitea-ingress.yaml
+cat $GITEA_DIR/gitea-ingress.yaml | sed 's~domain.placeholder~'"$K8S_DOMAIN"'~' > $GITEA_DIR/gen/gitea-ingress.yaml
+kubectl apply -f $GITEA_DIR/gen/gitea-ingress.yaml
 
 
 echo "-----------------------------------------------------------------------"
