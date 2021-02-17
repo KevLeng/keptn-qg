@@ -277,7 +277,7 @@ keptn auth  --api-token "${KEPTN_API_TOKEN}" --endpoint "${KEPTN_ENDPOINT}/api"
 echo "-----------------------------------------------------------------------"
 echo "Clone GitHub Repo
 echo "-----------------------------------------------------------------------"
-git clone --branch $REPO_RELEASE $REPO $REPO_DIR --single-branch"
+git clone --branch ${REPO_RELEASE} ${REPO} ${REPO_DIR} --single-branch"
 
 
 
@@ -286,7 +286,7 @@ git clone --branch $REPO_RELEASE $REPO $REPO_DIR --single-branch"
 defaultProject() {
   if [ "$create_default_project" = true ]; then
     echo "Create Default Dynatrace project"
-    keptn create project dynatrace --shipyard=$REPO_DIR/setup/shipyard.yaml
+    keptn create project dynatrace --shipyard=${REPO_DIR}/setup/shipyard.yaml
   fi
 }
 
@@ -299,7 +299,7 @@ echo "Add gitea-charts to helm"
 helm repo add gitea-charts https://dl.gitea.io/charts/
 
 GITEA_DIR="${REPO_DIR}/setup/gitea"
-source $GITEA_DIR/gitea-vars.sh
+source ${GITEA_DIR}/gitea-vars.sh
 
 echo "Create namespace for git"
 kubectl create ns git
@@ -307,10 +307,10 @@ kubectl create ns git
 sed -e 's~domain.placeholder~'"$K8S_DOMAIN"'~' \
     -e 's~GIT_USER.placeholder~'"$GIT_USER"'~' \
     -e 's~GIT_PASSWORD.placeholder~'"$GIT_PASSWORD"'~' \
-    $GITEA_DIR/helm-gitea.yaml > $GITEA_DIR/gen/helm-gitea.yaml
+    ${GITEA_DIR}/helm-gitea.yaml > ${GITEA_DIR}/gen/helm-gitea.yaml
 
 echo "Install gitea via Helmchart"
-helm install gitea gitea-charts/gitea -f $GITEA_DIR/gen/helm-gitea.yaml --namespace git
+helm install gitea gitea-charts/gitea -f ${GITEA_DIR}/gen/helm-gitea.yaml --namespace git
 
 echo "Setup Gitea ingress"
 cat $GITEA_DIR/gitea-ingress.yaml | sed 's~domain.placeholder~'"$K8S_DOMAIN"'~' > $GITEA_DIR/gen/gitea-ingress.yaml
