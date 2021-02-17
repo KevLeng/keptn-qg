@@ -355,4 +355,4 @@ echo "Git User:        $GIT_USER"
 echo "Git Password:    $GIT_PASSWORD"
 
 echo "K8S_DOMAIN=${K8S_DOMAIN}"
-echo "keptn auth  --api-token "${KEPTN_API_TOKEN}" --endpoint "${KEPTN_ENDPOINT}/api"
+echo "keptn auth  --api-token ${KEPTN_API_TOKEN} --endpoint ${KEPTN_ENDPOINT}/api"
