@@ -10,7 +10,7 @@ ISTIO_VERSION="1.7.3"
 KEPTN_VERSION="0.7.3"
 REPO="https://github.com/KevLeng/keptn-qg.git"
 REPO_RELEASE="main"
-REPO_DIR="~/keptn-qg"
+REPO_DIR="keptn-qg"
 
 DT_TENANT=${DT_TENANT:-none}
 DT_API_TOKEN=${DT_API_TOKEN:-none}
@@ -278,12 +278,12 @@ echo "-----------------------------------------------------------------------"
 echo "Clone GitHub Repo"
 echo "-----------------------------------------------------------------------"
 #git clone --branch ${REPO_RELEASE} ${REPO} ${REPO_DIR} --single-branch
-git clone --branch $REPO_RELEASE $REPO $REPO_DIR --single-branch
+git clone --branch $REPO_RELEASE $REPO "$REPO_DIR" --single-branch
 
 defaultProject() {
   if [ "$create_default_project" = true ]; then
     echo "Create Default Dynatrace project"
-    keptn create project dynatrace --shipyard="${REPO_DIR}/setup/shipyard.yaml"
+    keptn create project dynatrace --shipyard=$REPO_DIR/setup/shipyard.yaml
   fi
 }
 REPO_DIR="~/keptn-qg"
