@@ -19,6 +19,11 @@ DT_PAAS_TOKEN=${DT_PAAS_TOKEN:-none}
 TENANT=${TENANT:-none}
 APITOKEN=${APITOKEN:-none}
 
+
+
+create_default_project = true
+create_customer_project = true
+
 if [[ "$DT_TENANT" == "none" ]]; then
   if [[ "$TENANT" != "none" ]]; then
     DT_TENANT=${TENANT}
@@ -268,17 +273,31 @@ kubectl apply -n keptn -f https://raw.githubusercontent.com/keptn-sandbox/monaco
 echo "Authenticate Keptn CLI"
 keptn auth  --api-token "${KEPTN_API_TOKEN}" --endpoint "${KEPTN_ENDPOINT}/api"
 
-echo "Create Default Dynatrace project"
-keptn create project dynatrace --shipyard=./shipyard.yaml
-
 
 echo "-----------------------------------------------------------------------"
 echo "Clone GitHub Repo
 echo "-----------------------------------------------------------------------"
 git clone --branch $REPO_RELEASE $REPO $REPO_DIR --single-branch"
-echo "Create Default Dynatrace project"
-keptn create project dynatrace --shipyard=$REPO_DIR/shipyard.yaml
 
+
+
+
+defaultProject
+customerProject
+
+defaultProject() {
+  if [ "$create_default_project" = true ]; then
+    echo "Create Default Dynatrace project"
+    keptn create project dynatrace --shipyard=$REPO_DIR/setup/shipyard.yaml
+  fi
+}
+
+customerProject(){
+  if [ "$create_customer_project" = true ]; then
+    echo "Create Customer project"
+
+  fi
+}
 
 
 echo "-----------------------------------------------------------------------"
