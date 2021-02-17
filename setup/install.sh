@@ -280,10 +280,8 @@ echo "-----------------------------------------------------------------------"
 git clone --branch $REPO_RELEASE $REPO $REPO_DIR --single-branch"
 
 
-
-
 defaultProject
-customerProject
+
 
 defaultProject() {
   if [ "$create_default_project" = true ]; then
@@ -291,6 +289,36 @@ defaultProject() {
     keptn create project dynatrace --shipyard=$REPO_DIR/setup/shipyard.yaml
   fi
 }
+
+
+echo "-----------------------------------------------------------------------"
+echo "Installing Gitea as Git service for our upstream git repos"
+echo "-----------------------------------------------------------------------"
+echo "Add gitea-charts to helm"
+helm repo add gitea-charts https://dl.gitea.io/charts/
+
+source ./gitea-vars.sh
+
+echo "Create namespace for git"
+kubectl create ns git
+
+sed -e 's~domain.placeholder~'"$K8S_DOMAIN"'~' \
+    -e 's~GIT_USER.placeholder~'"$GIT_USER"'~' \
+    -e 's~GIT_PASSWORD.placeholder~'"$GIT_PASSWORD"'~' \
+    helm-gitea.yaml > gen/helm-gitea.yaml
+
+echo "Install gitea via Helmchart"
+helm install gitea gitea-charts/gitea -f gen/helm-gitea.yaml --namespace git
+
+echo "Setup Gitea ingress"
+cat gitea-ingress.yaml | sed 's~domain.placeholder~'"$K8S_DOMAIN"'~' > ./gen/gitea-ingress.yaml
+kubectl apply -f gen/gitea-ingress.yaml
+
+
+echo "-----------------------------------------------------------------------"
+echo "Waiting for Gitea pods to be ready (max 5 minutes)"
+echo "-----------------------------------------------------------------------"
+kubectl wait --namespace=git --for=condition=Ready pods --timeout=300s --all
 
 customerProject(){
   if [ "$create_customer_project" = true ]; then
