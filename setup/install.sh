@@ -277,18 +277,16 @@ keptn auth  --api-token "${KEPTN_API_TOKEN}" --endpoint "${KEPTN_ENDPOINT}/api"
 echo "-----------------------------------------------------------------------"
 echo "Clone GitHub Repo"
 echo "-----------------------------------------------------------------------"
-git clone --branch ${REPO_RELEASE} ${REPO} ${REPO_DIR} --single-branch
-
-
-
-
+#git clone --branch ${REPO_RELEASE} ${REPO} ${REPO_DIR} --single-branch
+git clone --branch $REPO_RELEASE $REPO $REPO_DIR --single-branch
 
 defaultProject() {
   if [ "$create_default_project" = true ]; then
     echo "Create Default Dynatrace project"
-    keptn create project dynatrace --shipyard=${REPO_DIR}/setup/shipyard.yaml
+    keptn create project dynatrace --shipyard="${REPO_DIR}/setup/shipyard.yaml"
   fi
 }
+REPO_DIR="~/keptn-qg"
 
 defaultProject
 
