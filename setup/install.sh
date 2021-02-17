@@ -286,7 +286,6 @@ defaultProject() {
     keptn create project dynatrace --shipyard=$REPO_DIR/setup/shipyard.yaml
   fi
 }
-REPO_DIR="~/keptn-qg"
 
 defaultProject
 
