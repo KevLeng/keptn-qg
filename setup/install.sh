@@ -280,7 +280,7 @@ echo "-----------------------------------------------------------------------"
 git clone --branch $REPO_RELEASE $REPO $REPO_DIR --single-branch"
 
 
-defaultProject
+
 
 
 defaultProject() {
@@ -290,6 +290,7 @@ defaultProject() {
   fi
 }
 
+defaultProject
 
 echo "-----------------------------------------------------------------------"
 echo "Installing Gitea as Git service for our upstream git repos"
@@ -297,7 +298,7 @@ echo "-----------------------------------------------------------------------"
 echo "Add gitea-charts to helm"
 helm repo add gitea-charts https://dl.gitea.io/charts/
 
-GITEA_DIR = "${REPO_DIR}/setup/gitea"
+GITEA_DIR="${REPO_DIR}/setup/gitea"
 source $GITEA_DIR/gitea-vars.sh
 
 echo "Create namespace for git"
